@@ -2,10 +2,16 @@ package com.tdea.pretest;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 class PretestApplicationTests {
 
     @Test
-    void contextLoads() {
+    void shouldPasswordEqual() {
+        UserUtils util = new UserUtils();
+        assertTrue(util.isPasswordEqual("123","123"));
     }
+
+
 
 }
