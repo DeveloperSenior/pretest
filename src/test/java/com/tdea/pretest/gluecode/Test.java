@@ -5,11 +5,13 @@ import io.cucumber.java.BeforeStep;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+
+import java.time.Duration;
 
 public class Test {
 
@@ -23,30 +25,29 @@ public class Test {
 
     }
 
-    @Given("testGiven")
-    public void test_given() {
+    @Given("User name {string} and password {string}")
+    public void test_given(String user,String pass) {
         setUp();
-        // Write code here that turns the phrase above into concrete actions
-       // throw new io.cucumber.java.PendingException()
+        WebElement userTag = this.driver.findElement(By.id("username"));
+        userTag.clear();
+        userTag.sendKeys(user);
+        WebElement passTag = this.driver.findElement(By.id("password"));
+        passTag.clear();
+        passTag.sendKeys(pass);
     }
 
-    @When("testWhen")
-    public void test_when() {
-        // Write code here that turns the phrase above into concrete actions
-        //throw new io.cucumber.java.PendingException();
-        WebElement user = this.driver.findElement(By.id("username"));
-        user.clear();
-        user.sendKeys("andres");
-        WebElement pass = this.driver.findElement(By.id("password"));
-        pass.clear();
-        pass.sendKeys("123");
+    @When("Use button {string} and response is {string}")
+    public void test_when(String button,String response)throws InterruptedException {
+        WebElement loginButton = this.driver.findElement(By.xpath("/html/body/div/div/button["+("Login".equals(button)? 1 : 2)+"]"));
+        loginButton.click();
+        Thread.sleep(1000);
+        WebElement responseTag = this.driver.findElement(By.xpath("/html/body/div/div/div[1]"));
+        Assertions.assertEquals(response,responseTag.getText());
     }
 
-    @Then("testThen")
-    public void test_then() {
-        // Write code here that turns the phrase above into concrete actions
-        //throw new io.cucumber.java.PendingException();
-        WebElement login = this.driver.findElement(By.xpath("//button[text()='Login']"));
-        login.submit();
+    @Then("Use button {string}")
+    public void test_then(String button) throws InterruptedException {
+        WebElement actionButton = this.driver.findElement(By.xpath("/html/body/div/div/button["+("Login".equals(button)? 1 : 2)+"]"));
+        actionButton.click();
     }
 }
